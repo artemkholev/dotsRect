@@ -11,8 +11,8 @@ public class Rect {
     public Point upPoint;
 
     public Rect(int x1, int y1, int x2, int y2) {
-        lowPoint = new Point(x1, y1);
-        upPoint = new Point(x2, y2);
+        this.lowPoint = new Point(x1, y1);
+        this.upPoint = new Point(x2, y2);
     }
 
     public static void sortXY() {
@@ -23,7 +23,6 @@ public class Rect {
     public static int getLengthXElems() {
         return xElems.size();
     }
-
     public static int getLengthYElems() {
         return yElems.size();
     }
@@ -38,4 +37,9 @@ public class Rect {
     }
     public static void addCordX (int xCord) {if (!xElems.contains(xCord)) xElems.add(xCord);}
     public static void addCordY (int yCord) {if (!yElems.contains(yCord)) yElems.add(yCord);}
+
+    public static int getEnd(ArrayList<Integer> array) {
+        int getRight = Integer.highestOneBit(array.size() - 1) << 1;
+        return Math.max(1, getRight) - 1;
+    }
 }

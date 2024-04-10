@@ -3,10 +3,10 @@ import auxiliary.Granters;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class Tree {
-    static HashMap<Integer, Tree> storage = new HashMap<>();
-    int indStart, indEnd, v, modifier;
-    Tree left, right;
+public class Tree {
+    public static HashMap<Integer, Tree> storage = new HashMap<>();
+    public int indStart, indEnd, v, modifier;
+    public Tree left, right;
 
     Tree (Tree elemTree) {
         v = elemTree.v;
@@ -24,7 +24,7 @@ class Tree {
         this.indEnd = end;
     }
 
-    static Tree generateTree (int start, int end) {
+    public static Tree generateTree(int start, int end) {
         if (start == end)
             return new Tree(start, end);
         int mid = (start + end) / 2;

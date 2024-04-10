@@ -1,5 +1,9 @@
 package algorithms;
+import auxiliary.Granters;
 import auxiliary.Rect;
+import structures.Tree;
+import structures.Matrix;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,23 +30,55 @@ public class AlgorithmsMethods {
 
         for (int i = 0; i < Rect.groupRect.length; ++i) {
             int x1 = scanner.nextInt(),
-                    y1 = scanner.nextInt(),
-                    x2 = scanner.nextInt(),
-                    y2 = scanner.nextInt();
+                y1 = scanner.nextInt(),
+                x2 = scanner.nextInt(),
+                y2 = scanner.nextInt();
             Rect.groupRect[i] = new Rect(x1, y1, x2 - 1, y2 - 1);
-            Rect.addCords(x1, y1, x2 - 1, y2 - 1);
+            Rect.addCords(x1, y1, x2, y2);
         }
         Rect.sortXY();
     }
 
-     public static ArrayList<String> getPointWithCount (Scanner scanner, AlgorithmsName alg) {
-        ArrayList<String> timeData = new ArrayList<>();
-        int count = scanner.nextInt();
-        for (int i = 0; i < count; ++i) {
-            int x = scanner.nextInt(),
-                    y = scanner.nextInt();
+    private static void preparedDataAlgorithms(AlgorithmsName alg, Scanner in) {
+        //save data rect for future actions
+        if (alg.equals(AlgorithmsName.first)) {
+            int countRect = in.nextInt();
+            Rect.groupRect = new Rect[countRect];
+            for (int i = 0; i < Rect.groupRect.length; ++i) {
+                int x1 = in.nextInt(),
+                    y1 = in.nextInt(),
+                    x2 = in.nextInt(),
+                    y2 = in.nextInt();
+                Rect.groupRect[i] = new Rect(x1, y1, x2 - 1, y2 - 1);
+            }
+        } else if (alg.equals(AlgorithmsName.second)) {
+            AlgorithmsMethods.getRect(in);
+            Matrix.generateMatrix();
+        } else if (alg.equals(AlgorithmsName.third)) {
+            AlgorithmsMethods.getRect(in);
+            Granters.fill();
+            int end = Rect.getEnd(Rect.yElems);
+            Tree root = Tree.generateTree(0, end);
+            Tree.storage.put(-1, root);
+
+            Tree.editTree(Granters.granters);
+        }
+    }
+
+     public static String getPointWithCount (AlgorithmsName alg, String testData) {
+        Scanner in = new Scanner(testData);
+        String time = "";
+
+        long startPrepared = System.nanoTime();
+        preparedDataAlgorithms(alg, in);//if it is second or third algorithm need to prepare data for find count
+        time += String.valueOf(System.nanoTime() - startPrepared);
+
+        int count = in.nextInt();
+        long start = System.nanoTime();
+        for (int i = 0; i < count; i++) {
+            int x = in.nextInt(),
+                y = in.nextInt();
             int countRect = 0;
-            long start = System.nanoTime();
             if (alg.equals(AlgorithmsName.first)) {
                 countRect = FirstAlgorithm.findCountPoints(x, y);
             } else if (alg.equals(AlgorithmsName.second)) {
@@ -50,10 +86,10 @@ public class AlgorithmsMethods {
             } else {
                 countRect = ThirdAlgorithm.findCountPoints(x, y);
             }
-            timeData.add(String.valueOf(System.nanoTime() - start));
-            System.out.print(countRect + " ");
+//            System.out.print(countRect + " ");
         }
-        System.out.println();
-        return timeData;
+        time += (" " + String.valueOf(System.nanoTime() - start));
+//        System.out.println();
+        return time;
     }
 }

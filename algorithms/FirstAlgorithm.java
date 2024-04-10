@@ -1,5 +1,7 @@
 package algorithms;
 
+import auxiliary.Rect;
+
 public class FirstAlgorithm {
     public static int findCountPoints(int x, int y) {
         int count = 0;

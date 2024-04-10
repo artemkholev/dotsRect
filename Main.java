@@ -1,44 +1,24 @@
 import algorithms.AlgorithmsMethods;
-import auxiliary.Rect;
-import structures.Matrix;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    AlgorithmsMethods.getRect(in);
-    //without preparation
-    ArrayList<String> time =  AlgorithmsMethods.getPointWithCount(in, AlgorithmsMethods.AlgorithmsName.first);
-    //with preparation
-    Matrix.generateMatrix();
-//    ArrayList<String> time = getPointWithCount(in, Algorithms.second);
-    //with preparation
-//    ArrayList<String> time = getPointWithCount(in, Algorithms.third);
+    String time = "";
+    TastData data = new TastData();
 
-//    TastData tests = new TastData();
-//    tests.countIteration = 20;
-//    tests.count = 10;
-//    for (int i = 0; i < tests.countIteration; i++) {
-//      //param
-//      tests.maxX = i * 1000L;
-//      tests.maxY = i * 1000L;
-//      tests.width = i * 10L;
-//      tests.high = i * 10L;
-//
-//      //generate tests
-//      tests.generateRect();
-//      tests.generatePoints();
-//
-//      //start algorithms
-//      long process = TimeWork.measureTime(() -> { startAlgorithms(); });
-//      time.add(tests.getmaxCordX() + " " + tests.getmaxCordY() + ", " + process);
-//    }
-    for (String s : time) {
-        System.out.println(s);
+    for (int n = 1; n < 10000; n+=100) {
+      String testData = data.getTestData(n);
+      //first algorithm
+//      time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.first, testData);
+
+      //second algorithm
+//    time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.second, testData);
+
+      //third algorithm
+      time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.third, testData);
+      System.out.println(time);
     }
-    in.close();
   }
 }
 
@@ -56,3 +36,4 @@ public class Main {
 2 10 -> 0
 2 8 -> 0
 */
+

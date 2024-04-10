@@ -18,7 +18,7 @@ public class Granters {
         this.start = start;
     }
 
-    public static void fill () {
+    public static void fill() {
         for (Rect rectangle : Rect.groupRect) {
             granters.add(new Granters(true, rectangle.lowPoint.x, rectangle.lowPoint.y, rectangle.upPoint.y));
             granters.add(new Granters(false, rectangle.upPoint.x + 1, rectangle.lowPoint.y, rectangle.upPoint.y));

@@ -1,62 +1,58 @@
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
+import java.util.List;
 
 public class TastData {
-    long countIteration = 0;
-    long count = 10,
-        maxX = 100000,
-        maxY = 100000,
-        width = 10000,
-        high = 10000;
-    public long getmaxCordX() {
-        return this.maxX + this.width;
+    private static List<Integer> p = new ArrayList<>();
+
+    TastData () {
+        p = primeNumbers(100);
     }
 
-    public long getmaxCordY() {
-        return this.maxY + this.high;
+    public static List<Integer> primeNumbers(int n) {
+        List<Integer> primeNumbers = new LinkedList<>();
+        for (int i = 3; i <= n; i += 2) {
+            if (isPrime(i))
+                primeNumbers.add(i);
+        }
+        return primeNumbers;
+    }
+    private static boolean isPrime(int number) {
+        for (int i = 2; i * i <= number; i++) {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
     }
 
-    public static long getRandomDiceNumber(long param)
-    {
-        return (long) (Math.random() * param);
-    }
-    public void generateRect() {
-        try(
-                FileWriter writer = new FileWriter("data/testRect.txt", false))
-        {
-            for (int i = 0; i < this.count; i++) {
-                String str;
-                long randomX = getRandomDiceNumber(this.maxX),
-                    randomY = getRandomDiceNumber(this.maxY),
-                    X =  randomX + getRandomDiceNumber(this.width),
-                    Y =  randomY + getRandomDiceNumber(this.high);
-                str = randomX + ";" + randomY + ";" + X + ";" + Y + "\n";
-                writer.write(str);
+    public static long modPow(long base, long exponent, long modulus) {
+        long result = 1;
+        base %= modulus;
+        while (exponent > 0) {
+            if ((exponent & 1) == 1) {
+                result = (result * base) % modulus;
             }
-            writer.flush();
+            exponent >>= 1;
+            base = (base * base) % modulus;
         }
-        catch(
-                IOException ex){
-            System.out.println(ex.getMessage());
-        }
+        return result;
     }
 
-    public void generatePoints() {
-        try(
-                FileWriter writer = new FileWriter("/data/testPoint.txt", false))
-        {
-            for (int i = 0; i < this.count; i++) {
-                String str;
-                long randomX = getRandomDiceNumber(this.maxX),
-                    randomY = getRandomDiceNumber(this.maxY);
-                str = randomX + ";" + randomY + "\n";
-                writer.write(str);
-            }
-            writer.flush();
+    public String getTestData(int n) {
+        Random random = new Random();
+        String testData = n + "\n";
+        for (int i = 0; i < n; i++)
+            testData += ((10 * i) + " " + (10 * i) + " " + (10 * (2 * n - i)) + " " + (10 * (2 * n - i)) + "\n");
+        testData += n + "\n";
+        for (int i = 0; i < n; i++) {
+            int pSize = p.size();
+            int randKeyOne = p.get(random.nextInt(pSize));
+            int randKeyTwo = p.get(random.nextInt(pSize));
+            int x = (int)modPow((long) randKeyOne * i, 31, 20L * n);
+            int y = (int)modPow((long) randKeyTwo * i, 31, 20L * n);
+            testData += (x + " " + y + "\n");
         }
-        catch(
-                IOException ex){
-            System.out.println(ex.getMessage());
-        }
+        return testData;
     }
 }

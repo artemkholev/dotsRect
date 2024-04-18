@@ -1,63 +1,66 @@
 package structures;
-import auxiliary.Granters;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+
+class NodeTree {
+    NodeTree left, right;
+    int indStart, indEnd, val;
+    NodeTree(NodeTree left, NodeTree right, int leftRange, int rightRange, int val) {
+        this.left = left;
+        this.right = right;
+        this.indEnd = rightRange;
+        this.indStart = leftRange;
+        this.val = val;
+    }
+}
 
 public class Tree {
-    public static HashMap<Integer, Tree> storage = new HashMap<>();
-    public int indStart, indEnd, v, modifier;
-    public Tree left, right;
+    public List<NodeTree> storageHistoryTree = new ArrayList<>();
 
-    Tree (Tree elemTree) {
-        v = elemTree.v;
-        modifier = elemTree.modifier;
-        indStart = elemTree.indStart;
-        indEnd = elemTree.indEnd;
-        left = elemTree.left;
-        right = elemTree.right;
-    }
-
-    Tree (int start, int end) {
-        this.left = this.right = null;
-        this.modifier = this.v = 0;
-        this.indStart = start;
-        this.indEnd = end;
-    }
-
-    public static Tree generateTree(int start, int end) {
-        if (start == end)
-            return new Tree(start, end);
-        int mid = (start + end) / 2;
-        Tree left = generateTree(start, mid);
-        Tree right = generateTree(mid + 1, end);
-        Tree root = new Tree(left.indStart, right.indEnd);
-        root.left = left;
-        root.right = right;
-        return root;
-    }
-    public static void editTree (ArrayList<Granters> granters) {
-        int lastState = -1;
-        for (Granters elem : granters) {
-            int modifier;
-            if (elem.start) modifier = 1;
-            else modifier = -1;
-            storage.put(elem.x, putValueTree(storage.get(lastState), elem.y1, elem.y2, modifier));
-            lastState = elem.x;
+    public Tree(List<Edge> edges, int size) {
+        NodeTree root = createEmptyTree(0, 0, size);
+        int pos = edges.get(0).pos;
+        for (Edge edge : edges) {
+            if (pos != edge.pos) {
+                storageHistoryTree.add(root);
+                pos = edge.pos;
+            }
+            root = editTree(root, edge.left, edge.right, edge.start);
         }
     }
 
-    private static Tree putValueTree (Tree root, int start, int end, int v) {
-        if (start > root.indEnd || end < root.indStart) { return root; }
-        Tree newTree = new Tree(root);
+    public NodeTree createEmptyTree(int tmp, int left, int right) {
+        if (right - left == 1)
+            return new NodeTree(null, null, left, right, tmp);
+        int mid = (left + right) / 2;
+        NodeTree leftNode = createEmptyTree(tmp, left, mid),
+                rightNode = createEmptyTree(tmp, mid, right);
+        return new NodeTree(leftNode, rightNode, leftNode.indStart, rightNode.indEnd, leftNode.val + rightNode.val);
+    }
 
-        if (start <= root.indStart && end >= root.indEnd) {
-            if (newTree.left != null || newTree.right != null) { newTree.modifier += v; }
-            else { newTree.v += v; }
-        } else {
-            newTree.left = putValueTree(root.left, start, end, v);
-            newTree.right = putValueTree(root.right, start, end, v);
-        }
-        return newTree;
+    public NodeTree editTree(NodeTree root, int left, int right, boolean start) {
+        int val = start ? 1 : -1;
+        if (right >= root.indEnd && left <= root.indStart)
+            return new NodeTree(root.left, root.right, root.indStart, root.indEnd, root.val + val);
+        else if (right <= root.indStart || root.indEnd <= left)
+            return root;
+        NodeTree createNewChangeRoot = new NodeTree(root.left, root.right, root.indStart, root.indEnd, root.val);
+        createNewChangeRoot.left = editTree(createNewChangeRoot.left, left, right, start);
+        createNewChangeRoot.right = editTree(createNewChangeRoot.right, left, right, start);
+        return createNewChangeRoot;
+    }
+
+    public int findPosInTree(int x, int y) {
+        return runIntoTree(storageHistoryTree.get(x), y);
+    }
+
+    public int runIntoTree(NodeTree root, int pos) {
+        if (root == null)
+            return 0;
+        int mid = (root.indStart + root.indEnd) / 2;
+        if (pos < mid)
+            return root.val + runIntoTree(root.left, pos);
+        return root.val + runIntoTree(root.right, pos);
     }
 }
 

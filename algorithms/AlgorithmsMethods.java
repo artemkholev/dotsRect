@@ -1,7 +1,6 @@
 package algorithms;
-import auxiliary.Granters;
 import auxiliary.Rect;
-import structures.Tree;
+import auxiliary.TreePreparation;
 import structures.Matrix;
 
 import java.util.ArrayList;
@@ -56,12 +55,7 @@ public class AlgorithmsMethods {
             Matrix.generateMatrix();
         } else if (alg.equals(AlgorithmsName.third)) {
             AlgorithmsMethods.getRect(in);
-            Granters.fill();
-            int end = Rect.getEnd(Rect.yElems);
-            Tree root = Tree.generateTree(0, end);
-            Tree.storage.put(-1, root);
-
-            Tree.editTree(Granters.granters);
+            TreePreparation.generateTreePreparation();
         }
     }
 
@@ -84,7 +78,7 @@ public class AlgorithmsMethods {
             } else if (alg.equals(AlgorithmsName.second)) {
                 countRect = SecondAlgorithm.findCountPoints(x, y);
             } else {
-                countRect = ThirdAlgorithm.findCountPoints(x, y);
+                countRect = TreePreparation.getQuantity(x, y);
             }
 //            System.out.print(countRect + " ");
         }

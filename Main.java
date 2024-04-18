@@ -10,10 +10,10 @@ public class Main {
     for (int n = 1; n < 10000; n+=100) {
       String testData = data.getTestData(n);
       //first algorithm
-//      time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.first, testData);
+      //time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.first, testData);
 
       //second algorithm
-//    time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.second, testData);
+      //time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.second, testData);
 
       //third algorithm
       time = n + " " + AlgorithmsMethods.getPointWithCount(AlgorithmsMethods.AlgorithmsName.third, testData);
@@ -29,11 +29,11 @@ public class Main {
 4 0 11 6
 8 2 12 12
 6
-2 2 -> 1
-12 12 -> 0
-10 4 -> 2
-5 5 -> 3
-2 10 -> 0
-2 8 -> 0
+2 2
+12 12
+10 4
+5 5
+2 10
+2 8
 */
 
